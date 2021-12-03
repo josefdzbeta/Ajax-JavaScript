@@ -40,3 +40,45 @@ function cargarFichero3(){
     xhttp.open('GET', 'datos1.txt', true)
     xhttp.send()
 }
+//Enviando datos al servidor por POST
+function cargarFichero5(){
+  let formData = new FormData()
+  formData.append('param1', 42)
+  formData.append('param2', 'Miguel')
+  let opciones = {
+    method: 'POST',
+    body: formData
+  }
+  fetch('php/datos_post.php', opciones)//Hacemos la petición
+    .then(respuesta => respuesta.text())  //Recibimos un objeto de tipo Response. respuesta.text devuelve una Promise
+    .then(texto => document.getElementById('span5').innerHTML = texto)
+}
+
+//Enviando datos al servidor por POST en JSON
+function cargarFichero6(){
+  let datos = {
+    'param1' : 42,
+    'param2' : 'Miguel'
+  }
+  let opciones = {
+    method: 'POST',
+    body: JSON.stringify(datos),
+    headers:{ 'Content-Type': 'application/json'}
+  }
+  fetch('php/datos_post_json.php', opciones)//Hacemos la petición
+    .then(respuesta => respuesta.text())  //Recibimos un objeto de tipo Response. respuesta.text devuelve una Promise
+    .then(texto => document.getElementById('span6').innerHTML = texto)
+}
+
+//Control de errores
+function cargarFichero7(){
+  fetch('php/error.php') //Hacemos la petición
+    .then(respuesta => {
+      if(respuesta.status!==200)
+        throw(respuesta.status)
+      else
+        respuesta.text()
+    })  //Recibimos un objeto de tipo Response. respuesta.text devuelve una Promise
+    .then(texto => document.getElementById('span7').innerHTML = texto)
+    .catch(error => console.log(error))
+}
